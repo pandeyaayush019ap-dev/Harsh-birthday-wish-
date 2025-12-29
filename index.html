@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Jaggu 💖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff4d94;
+            --secondary: #70003c;
+            --accent: #ff80b3;
+            --bg: #1a000e;
+            --text: #fff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Background Heart Animation */
+        .bg-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: var(--primary);
+            opacity: 0.3;
+            animation: float 6s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
+        /* Page Transitions */
+        .page {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .page.active { display: flex; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 { font-family: 'Dancing Script', cursive; font-size: 3rem; color: var(--primary); margin-bottom: 20px; text-shadow: 0 0 15px rgba(255, 77, 148, 0.5); }
+        p { font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px; }
+
+        /* Buttons */
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 77, 148, 0.4);
+            text-decoration: none;
+        }
+
+        .btn:hover { transform: scale(1.05); background: var(--accent); }
+
+        /* Page 2: Cuteness Meter */
+        .meter-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 2px solid var(--primary);
+        }
+
+        .meter-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            box-shadow: 0 0 20px var(--primary);
+            transition: width 0.1s linear;
+        }
+
+        #warning-text { color: #ffeb3b; font-weight: bold; min-height: 24px; visibility: hidden; }
+
+        /* Page 3: Heart Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .heart-card {
+            background: rgba(255, 77, 148, 0.1);
+            border: 1px solid var(--primary);
+            padding: 20px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.4s;
+            position: relative;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .heart-card.flipped { background: var(--primary); transform: rotateY(10deg); }
+        .heart-card span { font-size: 0.9rem; font-weight: bold; }
+
+        /* Page 4: Love Note */
+        .envelope-wrapper {
+            margin: 40px 0;
+            cursor: pointer;
+        }
+
+        .envelope {
+            width: 200px;
+            height: 130px;
+            background: var(--secondary);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .envelope::before {
+            content: "";
+            position: absolute;
+            top: -70px;
+            left: 0;
+            border-left: 100px solid transparent;
+            border-right: 100px solid transparent;
+            border-bottom: 70px solid var(--secondary);
+            transition: 0.5s;
+        }
+
+        .envelope.open::before { transform: rotateX(180deg); transform-origin: bottom; }
+
+        .letter {
+            position: absolute;
+            bottom: 10px;
+            width: 180px;
+            height: 110px;
+            background: white;
+            color: var(--bg);
+            padding: 10px;
+            font-size: 0.8rem;
+            transition: 0.5s;
+            z-index: -1;
+            border-radius: 5px;
+        }
+
+        .envelope.open .letter { transform: translateY(-100px); z-index: 2; height: auto; }
+
+        /* Final Page */
+        .confetti { font-size: 4rem; margin: 20px; }
+
+        /* Music Toggle */
+        .music-ctrl {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 1px solid var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-hearts" id="heartBg"></div>
+
+    <div class="music-ctrl" onclick="toggleMusic()">🎵</div>
+
+    <!-- Page 1: Landing -->
+    <div class="page active" id="p1">
+        <h1>Hey Beautiful 💕</h1>
+        <p>Today is special... because <span style="color:var(--primary); font-weight:bold;">YOU</span> were born.</p>
+        <div style="font-size: 5rem; margin-bottom: 30px;">🌸</div>
+        <button class="btn" onclick="nextPage('p2')">Start the Surprise →</button>
+    </div>
+
+    <!-- Page 2: Cuteness Meter -->
+    <div class="page" id="p2">
+        <h1>Cuteness Meter 💗</h1>
+        <p>Let's check the current levels...</p>
+        <div class="meter-container">
+            <div class="meter-fill" id="meterFill"></div>
+        </div>
+        <div id="meterText" style="font-weight: bold; font-size: 1.5rem;">0%</div>
+        <p id="warning-text">⚠ TOO CUTE TO HANDLE!</p>
+        <button class="btn" id="meterBtn" style="display:none;" onclick="nextPage('p3')">Next → Just for You</button>
+    </div>
+
+    <!-- Page 3: Reasons -->
+    <div class="page" id="p3">
+        <h1>Why You're Special 💝</h1>
+        <p>Tap the hearts to reveal...</p>
+        <div class="cards-grid">
+            <div class="heart-card" onclick="flip(this, 'You make ordinary days feel special')"><span>❤</span></div>
+            <div class="heart-card" onclick="flip(this, 'Your smile fixes everything')"><span>❤</span></div>
+            <div class="heart-card" onclick="flip(this, 'You\'re effortlessly adorable')"><span>❤</span></div>
+            <div class="heart-card" onclick="flip(this, 'Being you is your superpower')"><span>❤</span></div>
+        </div>
+        <button class="btn" onclick="nextPage('p4')">One Last Thing →</button>
+    </div>
+
+    <!-- Page 4: Love Note -->
+    <div class="page" id="p4">
+        <h1>A Little Note 💌</h1>
+        <div class="envelope-wrapper" onclick="openEnvelope(this)">
+            <div class="envelope" id="envelope">
+                <div class="letter">
+                    Jaggu,<br><br>
+                    You’re not just a birthday girl today — you’re a reason someone smiles a little more.<br><br>
+                    Stay the same. Stay magical. 💖
+                </div>
+            </div>
+        </div>
+        <p>Tap the envelope to open</p>
+        <button class="btn" onclick="nextPage('p5')">See My Wish →</button>
+    </div>
+
+    <!-- Page 5: Final Wish -->
+    <div class="page" id="p5">
+        <div class="confetti">🎉</div>
+        <h1>Happy Birthday Jaggu! 💖</h1>
+        <p>This little website exists just to remind you how special you are.</p>
+        <div style="font-size: 3rem; margin-bottom: 20px;">🎂</div>
+        <button class="btn" onclick="location.reload()">Replay the Surprise ♡</button>
+    </div>
+
+    <script>
+        // 1. Background Hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.innerHTML = '❤';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            document.getElementById('heartBg').appendChild(heart);
+            setTimeout(() => heart.remove(), 6000);
+        }
+        setInterval(createHeart, 300);
+
+        // 2. Navigation
+        function nextPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            if(id === 'p2') startMeter();
+        }
+
+        // 3. Cuteness Meter Logic
+        function startMeter() {
+            let fill = document.getElementById('meterFill');
+            let text = document.getElementById('meterText');
+            let warning = document.getElementById('warning-text');
+            let btn = document.getElementById('meterBtn');
+            let width = 0;
+            
+            let interval = setInterval(() => {
+                if (width >= 120) {
+                    clearInterval(interval);
+                    btn.style.display = 'block';
+                } else {
+                    width++;
+                    fill.style.width = width + '%';
+                    text.innerText = width + '%';
+                    if (width > 100) {
+                        warning.style.visibility = 'visible';
+                        text.style.color = '#ffeb3b';
+                    }
+                }
+            }, 50);
+        }
+
+        // 4. Card Flip Logic
+        function flip(card, message) {
+            card.classList.add('flipped');
+            card.innerHTML = `<span>${message}</span>`;
+        }
+
+        // 5. Envelope Logic
+        function openEnvelope(wrapper) {
+            document.getElementById('envelope').classList.toggle('open');
+        }
+
+        // 6. Audio Placeholder (You can add a direct link to an mp3)
+        const audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'); 
+        let playing = false;
+        function toggleMusic() {
+            if(!playing) { audio.play(); playing = true; }
+            else { audio.pause(); playing = false; }
+        }
+    </script>
+</body>
+</html>
